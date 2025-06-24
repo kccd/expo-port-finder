@@ -1,73 +1,57 @@
-import { useEvent } from 'expo';
-import ExpoPortFinder, { ExpoPortFinderView } from 'expo-port-finder';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import ExpoPortFinder from 'expo-port-finder';
+import { useEffect, useState, useCallback } from 'react';
+import { Button, Text, View, SafeAreaView } from 'react-native';
 
 export default function App() {
-  const onChangePayload = useEvent(ExpoPortFinder, 'onChange');
+  const [loading, setLoading] = useState(true);
+  const [port, setPort] = useState(0);
+  const [err, setErr] = useState('');
+
+  const getFreePort = useCallback(() => {
+    setLoading(true);
+    sleep(1000)
+      .then(() => {
+        return ExpoPortFinder.getPort(9564, 10000)
+      })
+      .then(port => {
+        setPort(port);
+      })
+      .catch(err => {
+        setErr(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }, []);
+
+  useEffect(() => {
+    getFreePort();
+  }, [getFreePort]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{ExpoPortFinder.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{ExpoPortFinder.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
-          <Button
-            title="Set value"
-            onPress={async () => {
-              await ExpoPortFinder.setValueAsync('Hello from JS!');
-            }}
-          />
-        </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <ExpoPortFinderView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
-          />
-        </Group>
-      </ScrollView>
+    <SafeAreaView>
+      <View style={{
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+      }}>
+        {
+          loading? (
+            <Text style={{color: '#fff'}}>Loading...</Text>
+          ): (
+            <Text style={{color: '#fff'}}>{err? `Error: ${err}`: `Free Port: ${port}`}</Text> 
+          )
+        }
+        <Button title='GET PORT' onPress={getFreePort} />
+      </View>
     </SafeAreaView>
   );
 }
 
-function Group(props: { name: string; children: React.ReactNode }) {
-  return (
-    <View style={styles.group}>
-      <Text style={styles.groupHeader}>{props.name}</Text>
-      {props.children}
-    </View>
-  );
+async function sleep(time: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
+  });
 }
-
-const styles = {
-  header: {
-    fontSize: 30,
-    margin: 20,
-  },
-  groupHeader: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  group: {
-    margin: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#eee',
-  },
-  view: {
-    flex: 1,
-    height: 200,
-  },
-};

@@ -1,11 +1,7 @@
 import { NativeModule, requireNativeModule } from 'expo';
 
-import { ExpoPortFinderModuleEvents } from './ExpoPortFinder.types';
-
-declare class ExpoPortFinderModule extends NativeModule<ExpoPortFinderModuleEvents> {
-  PI: number;
-  hello(): string;
-  setValueAsync(value: string): Promise<void>;
+declare class ExpoPortFinderModule extends NativeModule {
+  getPort(startPort: number, stopPort: number): Promise<number>
 }
 
 // This call loads the native module object from the JSI.
