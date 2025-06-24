@@ -36,12 +36,13 @@ export default function App() {
         justifyContent: 'center',
         alignItems: 'center',
         gap: 10,
+        backgroundColor: '#fff',
       }}>
         {
           loading? (
-            <Text style={{color: '#fff'}}>Loading...</Text>
+            <Text style={{color: '#000'}}>Loading...</Text>
           ): (
-            <Text style={{color: '#fff'}}>{err? `Error: ${err}`: `Free Port: ${port}`}</Text> 
+            <Text style={{color: '#000'}}>{err? `Error: ${err}`: `Free Port: ${port}`}</Text> 
           )
         }
         <Button title='GET PORT' onPress={getFreePort} />
