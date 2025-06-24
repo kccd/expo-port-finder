@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-port-finder": ["../src/index"],
+      "expo-port-finder/*": ["../src/*"]
+    }
+  }
+}

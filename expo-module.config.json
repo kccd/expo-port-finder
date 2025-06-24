@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ExpoPortFinderModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.portfinder.ExpoPortFinderModule"]
+  }
+}
