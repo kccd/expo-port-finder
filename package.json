@@ -1,7 +1,7 @@
 {
   "name": "expo-port-finder",
-  "version": "0.1.0",
-  "description": "free port finder",
+  "version": "0.1.1",
+  "description": "A simple tool to find an open port on Expo",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
